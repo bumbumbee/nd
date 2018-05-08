@@ -38,13 +38,13 @@ INSERT INTO comments (author, comment, created_at) VALUES (:author, :comment, :c
     $sth->bindParam(':comment', $comment);
     $sth->bindParam(':created_at', $created_at);
 
-    // generuoja komentarus/autorius ir spausdina kiekviena sugeneruota eilute:
+    // generuoja komentarus/autorius:
     for ($i=0; $i < 10; $i++) {
         $author=$faker->name;
         $comment=$faker->realText($maxNbChars = 200, $indexSize = 2);
         $created_at=$faker->date($format = 'Y-m-d', $max = 'now');
         $sth->execute();
-        echo $author." ".$comment." ".$created_at."<br>";
+    //    echo $author." ".$comment." ".$created_at."<br>";
     }
 }
 
@@ -64,7 +64,10 @@ function comments_web(){
         array_push($result, $comment);
     }
     // naujausi 10 komentatu json formatu:
-    echo "<br><br>".json_encode($result)."<br>";
+    header("Access-Control-Allow-Origin: *");
+    header("Content-Type: application/json; charset=UTF-8");
+
+    echo json_encode($result);
 }
 comments_web();
 
